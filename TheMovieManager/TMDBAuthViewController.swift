@@ -53,4 +53,16 @@ class TMDBAuthViewController: UIViewController {
 extension TMDBAuthViewController: UIWebViewDelegate {
     
     // TODO: Add implementation here
+//    in here we want to be able to dismiss the web view on a certain action
+    func webViewDidFinishLoad(webview: UIWebView) {
+        print(webView.request?.URL?.absoluteString)
+//      check for the correct auth token in the url
+        if webView.request?.URL?.absoluteString == "\(TMDBClient.Constants.AuthorizationURL)\(requestToken!)/allow" {
+            dismissViewControllerAnimated(true) {
+                self.completionHandlerForView!(success: true, errorString: nil)
+            }
+        }
+    }
+    
+    
 }

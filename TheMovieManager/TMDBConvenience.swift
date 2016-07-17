@@ -70,54 +70,31 @@ extension TMDBClient {
             }
         }
     }
-//    
-//    private func getRequestToken(completionHandlerForToken: (success: Bool, requestToken: String?, errorString: String?) -> Void) {
-//        
-//        /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
-//        let paramteres = [String: AnyObject]()
-//        
-//        /* 2. Make the request */
-//        taskForGETMethod(Methods.AuthenticationTokenNew, parameters: paramteres) { (results, error) in
-//            
-//            /* 3. Send the desired value(s) to completion handler */
-//            if let error = error {
-//                print("error:", error)
-//                completionHandlerForToken(success: false, requestToken: nil, errorString: "Login Failed (Request Token).")
-//            } else {
-////                if there was not an error then we send back the results
-//                if let requestToken = results[TMDBClient.JSONResponseKeys.RequestToken] as? String {
-//                   completionHandlerForToken(success: true, requestToken: requestToken, errorString: nil)
-//                } else {
-//                    print("No key for request token found")
-//                    completionHandlerForToken(success: false, requestToken: nil, errorString: "Login failed (no request token)")
-//                }
-//            }
-//
-//        }
-//        
-//    }
     
     private func getRequestToken(completionHandlerForToken: (success: Bool, requestToken: String?, errorString: String?) -> Void) {
         
-        /* 1. Specify parameters, method (if has {key}), and HTTP body (if POST) */
-        let parameters = [String:AnyObject]()
+        /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
+        let paramteres = [String: AnyObject]()
         
         /* 2. Make the request */
-        taskForGETMethod(TMDBClient.Methods.AuthenticationTokenNew, parameters: parameters) { (results, error) in
+        taskForGETMethod(Methods.AuthenticationTokenNew, parameters: paramteres) { (results, error) in
             
             /* 3. Send the desired value(s) to completion handler */
             if let error = error {
-                print(error)
+                print("error:", error)
                 completionHandlerForToken(success: false, requestToken: nil, errorString: "Login Failed (Request Token).")
             } else {
+//                if there was not an error then we send back the results
                 if let requestToken = results[TMDBClient.JSONResponseKeys.RequestToken] as? String {
-                    completionHandlerForToken(success: true, requestToken: requestToken, errorString: nil)
+                   completionHandlerForToken(success: true, requestToken: requestToken, errorString: nil)
                 } else {
-                    print("Could not find \(TMDBClient.JSONResponseKeys.RequestToken) in \(results)")
-                    completionHandlerForToken(success: false, requestToken: nil, errorString: "Login Failed (Request Token).")
+                    print("No key for request token found")
+                    completionHandlerForToken(success: false, requestToken: nil, errorString: "Login failed (no request token)")
                 }
             }
+
         }
+        
     }
     
     private func loginWithToken(requestToken: String?, hostViewController: UIViewController, completionHandlerForLogin: (success: Bool, errorString: String?) -> Void) {
