@@ -39,7 +39,7 @@ class TMDBClient : NSObject {
         parameters[ParameterKeys.ApiKey] = Constants.ApiKey
         
 //        build the URL and configure the request
-        let request = NSMutableURLRequest(URL: TMDBClient.tmdbURLFromParameters(parameters, withPathExtension: TMDBClient.Methods.Account))
+        let request = NSMutableURLRequest(URL: TMDBClient.tmdbURLFromParameters(parameters, withPathExtension: method))
         
 //        make the request
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
@@ -57,6 +57,7 @@ class TMDBClient : NSObject {
             
             /* GUARD: Did we get a successful 2XX response? */
             guard let statusCode = (response as? NSHTTPURLResponse)?.statusCode where statusCode >= 200 && statusCode <= 299 else {
+                print("here:", response as? NSHTTPURLResponse)
                 sendError("Your request returned a status code other than 2xx!")
                 return
             }
