@@ -39,6 +39,7 @@ class MovieDetailViewController: UIViewController {
     // MARK: Actions
     
     @IBAction func toggleFavorite(sender: AnyObject) {
+        
 
     }
     
