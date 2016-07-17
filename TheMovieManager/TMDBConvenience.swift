@@ -184,9 +184,25 @@ extension TMDBClient {
     func getMoviesForSearchString(searchString: String, completionHandlerForMovies: (result: [TMDBMovie]?, error: NSError?) -> Void) -> NSURLSessionDataTask? {
         
         /* 1. Specify parameters, the API method, and the HTTP body (if POST) */
+        let parameters = [
+            TMDBClient.ParameterKeys.Query: searchString
+        ]
         /* 2. Make the request */
+        let task = taskForGETMethod(TMDBClient.Methods.SearchMovie, parameters: parameters) { (results, error) in
+            if error != nil {
+                completionHandlerForMovies(result: nil, error: error)
+            } else {
+//                if there are results then see if there is a results key
+                if let results = results[TMDBClient.JSONResponseKeys.MovieResults] as? [[String:AnyObject]] {
+                    let movies = TMDBMovie.moviesFromResults(results)
+                    completionHandlerForMovies(result: movies, error: nil)
+                } else {
+                    completionHandlerForMovies(result: nil, error: NSError(domain: "getMoviesForSearchString parsing", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not parse getMoviesForSearchString"]))
+                }
+            }
+        }
         /* 3. Send the desired value(s) to completion handler */
-        return nil
+        return task
     }
     
     func getConfig(completionHandlerForConfig: (didSucceed: Bool, error: NSError?) -> Void) {
